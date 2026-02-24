@@ -109,16 +109,55 @@ body {
     <div class="popup">
         <h2 id="popupText"></h2>
         <!-- 替换为你的图片 -->
-        <img src="./Picture/picture.jpg">
+        <img src="C:\Users\Lenovo\Desktop\新建文件夹\DSC01331.JPG">
     </div>
 </div>
-
 <script>
 let hasOpened = false;
+
+// 店铺经纬度（⚠ 请替换为真实坐标）
+const storeLat = 41.53780034547015;
+const storeLng = 121.2385245930938;
+
+// 允许范围（单位：米）
+const allowedDistance = 100;
 
 function openRed() {
 
     if (hasOpened) return;
+
+    // 先检测位置
+    if (!navigator.geolocation) {
+        alert("您的浏览器不支持定位功能");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+
+            const userLat = position.coords.latitude;
+            const userLng = position.coords.longitude;
+
+            const distance = getDistance(userLat, userLng, storeLat, storeLng);
+
+            if (distance > allowedDistance) {
+                alert("您不在爱家百货附近，请前往店家领取红包~");
+                return;
+            }
+
+            // 在范围内才允许打开红包
+            realOpen();
+
+        },
+        function() {
+            alert("无法获取您的位置，请允许定位后再试");
+        }
+    );
+}
+
+// 真正打开红包
+function realOpen() {
+
     hasOpened = true;
 
     const top = document.getElementById("top");
@@ -127,7 +166,6 @@ function openRed() {
     const btn = document.querySelector(".open-btn");
 
     btn.style.pointerEvents = "none";
-
     top.style.transform = "rotateX(180deg)";
 
     const rewards = [0.5,1,1.5,2,2.5,3,3.5,4,4.5,5];
@@ -152,6 +190,22 @@ function openRed() {
                               + money + " 元</span>";
         overlay.style.display = "flex";
     }, 600);
+}
+
+// 计算两点之间距离（米）
+function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6378137; // 地球半径
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+
+    const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180) *
+        Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
 }
 </script>
 
