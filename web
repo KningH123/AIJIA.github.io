@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>爱家百货红包</title>
+
+<style>
+body {
+    margin: 0;
+    background: #f44336;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: "Microsoft YaHei", sans-serif;
+}
+
+/* 红包整体 */
+.red-envelope {
+    width: 280px;
+    height: 380px;
+    background: #d32f2f;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    text-align: center;
+    color: #fff;
+}
+
+/* 上盖 */
+.top {
+    background: #b71c1c;
+    height: 160px;
+    border-radius: 12px 12px 100% 100%;
+    position: relative;
+    transition: all 0.6s ease;
+    transform-origin: top;
+}
+
+/* 开按钮 */
+.open-btn {
+    position: absolute;
+    top: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: gold;
+    color: #b71c1c;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    line-height: 80px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.2s;
+}
+
+.open-btn:hover {
+    transform: translateX(-50%) scale(1.1);
+}
+
+/* 金额显示 */
+.result {
+    margin-top: 200px;
+    font-size: 26px;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+</style>
+</head>
+
+<body>
+
+<div class="red-envelope">
+    <div class="top" id="top"></div>
+    <div class="open-btn" onclick="openRed()">开</div>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+function openRed() {
+    const top = document.getElementById("top");
+    const result = document.getElementById("result");
+
+    // 打开动画
+    top.style.transform = "rotateX(180deg)";
+
+    // 随机金额
+    const money = (Math.random() * 50 + 1).toFixed(2);
+
+    setTimeout(() => {
+        result.innerHTML = "恭喜您获得<br><span style='font-size:40px;color:gold'>" 
+                           + money + " 元</span>";
+        result.style.opacity = 1;
+    }, 600);
+}
+</script>
+
+</body>
+</html>
